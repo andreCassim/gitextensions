@@ -289,16 +289,7 @@ namespace GitUI.UserControls.RevisionGrid.Graph
                 if (!_nodeByObjectId.TryGetValue(objectId, out n))
                 {
                     n = new Node(objectId);
-                    if (!_nodeByObjectId.TryAdd(objectId, n))
-                    {
-                        if (Debugger.IsAttached)
-                        {
-                            Debugger.Break();
-                        }
-
-                        Thread.Sleep(1);
-                        _nodeByObjectId.TryAdd(objectId, n);
-                    }
+                    _nodeByObjectId.TryAdd(objectId, n);
 
                     return false;
                 }
@@ -757,15 +748,7 @@ namespace GitUI.UserControls.RevisionGrid.Graph
             // Remove all nodes that don't have a value associated with them.
             foreach (var node in nodesToRemove)
             {
-                if (!_nodeByObjectId.TryRemove(node.ObjectId, out Node removedValue))
-                {
-                    if (Debugger.IsAttached)
-                    {
-                        Debugger.Break();
-                    }
-
-                    _nodeByObjectId.TryRemove(node.ObjectId, out removedValue);
-                }
+                _nodeByObjectId.TryRemove(node.ObjectId, out Node removedValue);
 
                 // This guy should have been at the end of some junctions
                 foreach (var descendant in node.Descendants)
